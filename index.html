@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sporcle Picture Box Maker</title>
+    <style>
+        /* Add your CSS styles here */
+        #preview {
+            max-width: 300px;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sporcle Picture Box Maker</h1>
+    <input type="file" id="fileInput">
+    <img id="preview" src="#" alt="Preview">
+
+    <div id="answers">
+        <input type="text" placeholder="Type Answer">
+    </div>
+
+    <button onclick="addAnswer()">Add Answer</button>
+    <button onclick="generateQuiz()">Generate Quiz</button>
+
+    <script>
+        function addAnswer() {
+            const answersContainer = document.getElementById("answers");
+            const input = document.createElement("input");
+            input.type = "text";
+            input.placeholder = "Type Answer";
+            answersContainer.appendChild(input);
+        }
+
+        function generateQuiz() {
+            const fileInput = document.getElementById("fileInput");
+            const preview = document.getElementById("preview");
+            const answers = document.querySelectorAll("#answers input");
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+
+                    // Construct the quiz text
+                    let quizText = "";
+                    quizText += `<img src="${e.target.result}" alt="Image">`;
+                    answers.forEach((input, index) => {
+                        if (input.value.trim() !== "") {
+                            quizText += `<input type="text" name="guess${index + 1}" placeholder="Type Answer">`;
+                        }
+                    });
+
+                    // Show the generated quiz
+                    alert("Generated Quiz:\n\n" + quizText);
+                };
+
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>
